@@ -38,7 +38,7 @@ function qrc_generator($content){
     $current_post_title = get_the_title($current_post_id);
     $current_permalink = urlencode(get_permalink($current_post_id));
     $link = sprintf('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=%s',$current_permalink);
-    if(false){
+    if(!is_page()){
         $content.= sprintf("<div><img src='%s' alt='%s'></div>",$link,$current_post_title);
     }
     
