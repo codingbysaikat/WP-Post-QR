@@ -34,7 +34,6 @@ add_action('plugin_loaded','qcr_loaded_textdomin');
 
 function qrc_generator($content){
     $current_post_id = get_the_ID();
-    $current_post_type = get_post_type($current_post_id);
     $current_post_title = get_the_title($current_post_id);
     $current_permalink = urlencode(get_permalink($current_post_id));
     $link = sprintf('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=%s',$current_permalink);
