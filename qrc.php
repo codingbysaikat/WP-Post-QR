@@ -7,7 +7,7 @@
  * Version:           1.0.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
- * Author:           saikat mondal
+ * Author:            saikat mondal
  * Author URI:        https://author.example.com/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -76,3 +76,4 @@ function qrc_width_set()
     printf("<input type='text' id='%s' name='%s' value='%s'>", 'qrc_width', 'qrc_width', $width);
 }
 add_action('admin_init', 'qrc_setting_init');
+ 
