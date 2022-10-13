@@ -26,8 +26,7 @@
 // register_deactivation_hook( __FILE__, 'qcr_deactivation_to_run' );
 
 
-function qcr_loaded_textdomin()
-{
+function qcr_loaded_textdomin(){
     load_plugin_textdomain( 'qcr', false, dirname(__FILE__ . 'languages') );
 }
 add_action( 'plugin_loaded', 'qcr_loaded_textdomin' );
