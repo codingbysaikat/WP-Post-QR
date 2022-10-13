@@ -33,19 +33,18 @@ function qcr_loaded_textdomin()
 add_action( 'plugin_loaded', 'qcr_loaded_textdomin' );
 
 
-function qrc_generator($content)
-{
+function qrcg_generator($content){
     $current_post_id = get_the_ID();
     $current_post_title = get_the_title($current_post_id);
     $current_post_type = get_post_type($current_post_id);
-    $excluded_post_type = apply_filters('qrc_post-type', array());
+    $excluded_post_type = apply_filters('qrcg_post-type', array(),'post');
     $current_permalink = urlencode(get_permalink($current_post_id));
-    $height = get_option('qrc_height');
+    $height = get_option('qrcg_height');
     $height = $height ? $height : '250';
-    $width = get_option('qrc_width');
+    $width = get_option('qrcg_width');
     $width = $width ? $width : '250';
 
-    $dimension = apply_filters('qrc_code_height', "{$width}x{$height}");
+    $dimension = apply_filters('qrcg_code_height', "{$width}x{$height}");
     $link = sprintf('https://api.qrserver.com/v1/create-qr-code/?size=%s&ecc=L&qzone=1&data=%s', $dimension, $current_permalink);
     if (!is_page()) {
         if (in_array($current_post_type, $excluded_post_type)) {
@@ -54,26 +53,27 @@ function qrc_generator($content)
     }
     return $content;
 }
-add_filter('the_content', 'qrc_generator');
+add_filter('the_content', 'qrcg_generator');
 
-function qrc_setting_init()
-{
-    add_settings_field('qrc_height', __('QR code Height', 'qrc'), 'qrc_height_set', 'general');
-    add_settings_field('qrc_width', __('QR Code width', 'qrc'), 'qrc_width_set', 'general');
+function qrcg_setting_init(){
+    add_settings_section('qrcg_section', __('WP Post QR Code Generator setings', 'qrcg'),'qrcg_section_callback','general');
+    add_settings_field('qrcg_height', __('QR code Height', 'qrcg'), 'qrcg_height_set', 'general','qrcg_section');
+    add_settings_field('qrcg_width', __('QR Code width', 'qrcg'), 'qrcg_width_set', 'general','qrcg_section');
 
-    register_setting('general', 'qrc_height', array('sanitize_callback' => 'esc_attr'));
-    register_setting('general', 'qrc_width', array('sanitize_callback' => 'esc_attr'));
-}
-function qrc_height_set()
-{
-    $height = get_option('qrc_height');
-
-    printf("<input type='text' id='%s' name = '%s' value ='%s'>", 'qrc_height', 'qrc_height', $height);
-}
-function qrc_width_set()
-{
-    $width = get_option('qrc_width');
-    printf("<input type='text' id='%s' name='%s' value='%s'>", 'qrc_width', 'qrc_width', $width);
-}
-add_action('admin_init', 'qrc_setting_init');
+    register_setting('general', 'qrcg_height', array('sanitize_callback' => 'esc_attr'));
+    register_setting('general', 'qrcg_width', array('sanitize_callback' => 'esc_attr'));
+};
+add_action('admin_init', 'qrcg_setting_init');
  
+function qrcg_section_callback(){
+    echo "<p>".__('Settings for Posts To QR Plugin','qrcg')."</p>";
+};
+function qrcg_height_set(){
+    $height = get_option('qrcg_height');
+
+    printf("<input type='text' id='%s' name = '%s' value ='%s'>", 'qrcg_height', 'qrcg_height', $height);
+};
+function qrcg_width_set(){
+    $width = get_option('qrcg_width');
+    printf("<input type='text' id='%s' name='%s' value='%s'>", 'qrcg_width', 'qrcg_width', $width);
+};
