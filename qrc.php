@@ -25,7 +25,17 @@
 // }
 // register_deactivation_hook( __FILE__, 'qcr_deactivation_to_run' );
 
+$pqrc_container = array(
+    __('Afganistan','pqrc'),
+    __('bangladesh','pqrc'),
+    __('India','pqrc','pqrc'),
+    __('pakistan','pqrc','pqrc'),
+    __('Napel','pqrc','pqrc'),
+    __('Sri Lanka','pqrc'),
+    __('Bhutan','pqrc'),
+    __('Maldives','pqrc'),
 
+);
 function qcr_loaded_textdomin(){
     load_plugin_textdomain( 'qcr', false, dirname(__FILE__ . 'languages') );
 }
@@ -58,15 +68,18 @@ function qrcg_setting_init(){
     add_settings_section('qrcg_section', __('WP Post QR Code Generator setings', 'qrcg'),'qrcg_section_callback','general');
     add_settings_field('qrcg_height', __('QR code Height', 'qrcg'), 'qrcg_height_set', 'general','qrcg_section');
     add_settings_field('qrcg_width', __('QR Code width', 'qrcg'), 'qrcg_width_set', 'general','qrcg_section');
+    add_settings_field('qrcg_select',__('Select a Country','qrcg'),'qrcg_select_flied','general','qrcg_section');
 
     register_setting('general', 'qrcg_height', array('sanitize_callback' => 'esc_attr'));
     register_setting('general', 'qrcg_width', array('sanitize_callback' => 'esc_attr'));
+    register_setting('general','qrcg_select',array('sanitize_callback'=>'esc_attr'));
 };
 add_action('admin_init', 'qrcg_setting_init');
  
 function qrcg_section_callback(){
     echo "<p>".__('Settings for Posts To QR Plugin','qrcg')."</p>";
 };
+
 function qrcg_height_set(){
     $height = get_option('qrcg_height');
 
@@ -76,3 +89,19 @@ function qrcg_width_set(){
     $width = get_option('qrcg_width');
     printf("<input type='text' id='%s' name='%s' value='%s'>", 'qrcg_width', 'qrcg_width', $width);
 };
+function qrcg_select_flied(){
+    $option = get_option('qrcg_select');
+    printf("<select id='%s' name='%s' value='%s'>",'qrcg_select','qrcg_select',$option);
+    global $pqrc_container;
+    foreach($pqrc_container as $item){
+        $select = '';
+        if($option == $item){
+            $select = 'selected';
+        }
+        printf("<option value='%s' %s > %s </option>", $item,$select,$item);
+
+    }
+
+    echo '</select>';
+
+}
